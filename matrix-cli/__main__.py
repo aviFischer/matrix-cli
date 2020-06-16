@@ -1,7 +1,8 @@
 import sys
 import argparse
 
-from .matrix import Matrix
+from .solution_runner import SolutionRunner
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Enter the command for the matrix cli')
@@ -22,4 +23,5 @@ def parse_args():
 
 if __name__ == '__main__':
     args = parse_args()
-    print(args)
+    solution_runner = SolutionRunner(args)
+    solution_runner.run()

@@ -1,34 +1,48 @@
 from .matrix import Matrix
 from .matrix_solver import MatrixSolver
 
+class InvalidMatrixStringError(Exception):
+    def __init__(self, message):
+        self.message = f'Couldn\'t parse string \"{message}\" into a matrix'
+
+    def __str__(self):
+        return self.message
+    
+
 class SolutionRunner:
     def __init__(self, args):
         self.args = args
 
-    def string_to_matrix(self, matrix_str):
-        matrix_str = matrix_str.replace(' ', '') #removes any spaces
-        matrix_str = matrix_str[2:len(matrix_str) - 3] #trims trailing square brackets
+    def string_to_matrix(self, input):
+        matrix_str = input.replace(' ', '') #removes any spaces
+        matrix_str = matrix_str[2:len(matrix_str) - 2] #trims trailing square brackets
         row_array = matrix_str.split('],[') #splits into rows
 
         matrix = []
+        try:
+            for row in row_array:
+                element_array = row.split(',')
+                for index in range(len(element_array)):
+                    element_array[index] = float(element_array[index])
+                matrix.append(element_array)
 
-        for row in row_array:
-            element_array = row.split(',')
-            for index in range(len(element_array)):
-                element_array[index] = float(element_array[index])
+            return Matrix(matrix)
+        except:
+            raise(InvalidMatrixStringError(input))
 
-        return Matrix(matrix)
-
-    def run(self, args):
-        command = args.command
+    def run(self):
+        command = self.args.command
         matrix_solver = MatrixSolver()
         solution = None
 
-        if command == 'to_rref':
-            solution = matrix_solver.to_rref(self.string_to_matrix(args.input_matrix))
+        try:
+            if command == 'to-rref':
+                solution = matrix_solver.to_rref(self.string_to_matrix(self.args.input_matrix))
 
-        if len(args.output) == 0:
-            print(solution)
-        else:
-            f = open(args.output, 'w')
-            f.write(solution)
+            if len(self.args.output) == 0:
+                print(solution)
+            else:
+                f = open(self.args.output, 'w')
+                f.write(solution)
+        except InvalidMatrixStringError:
+            print(f'Unable to parse string "{self.args.input_matrix}" into a matrix')
