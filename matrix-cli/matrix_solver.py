@@ -28,3 +28,17 @@ class MatrixSolver:
                     matrix.add_row(row, col, matrix[row][col] / matrix[col][col] * -1)
 
         return matrix
+
+    def determinant(self, matrix):
+        if matrix.rows != matrix.cols:
+            return 'Couldn\'t take the determinant of a non-square matrix'
+        
+        if matrix.rows == 2:
+            return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix [1][0]
+
+        output = 0
+        for i in range(matrix.rows):
+            output += matrix[i][0] * self.determinant(matrix.sub_matrix(i, 0))
+        
+        return output
+

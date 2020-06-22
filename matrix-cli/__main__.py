@@ -19,6 +19,12 @@ def parse_args():
                                 type=str,
                                 default='')
 
+    determinant_parser = subparsers.add_parser('determinant')
+    determinant_parser.add_argument('--input-matrix',
+                                action='store',
+                                type=str,
+                                default='')
+
     return(parser.parse_args(sys.argv[1:]))
 
 if __name__ == '__main__':

@@ -38,6 +38,8 @@ class SolutionRunner:
         try:
             if command == 'to-rref':
                 solution = matrix_solver.to_rref(self.string_to_matrix(self.args.input_matrix))
+            if command == 'determinant':
+                solution = matrix_solver.determinant(self.string_to_matrix(self.args.input_matrix))
 
             if len(self.args.output) == 0:
                 print(solution)
